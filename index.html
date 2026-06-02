@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Escapadas · 9–12 Octubre · Desde Buenos Aires</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #f5f0e8;
+    --sand: #e8dfc9;
+    --terracotta: #c4633a;
+    --moss: #4a6741;
+    --slate: #2c3e50;
+    --muted: #7a7065;
+    --gold: #c9964a;
+    --sky: #6b9ab8;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--cream); color: var(--slate); font-family: 'DM Sans', sans-serif; font-weight: 300; }
+
+  header {
+    background: var(--slate);
+    color: var(--cream);
+    padding: 50px 40px 44px;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 80% 50%, rgba(196,99,58,.25) 0%, transparent 65%);
+  }
+  header h1 { font-family: 'Playfair Display', serif; font-size: clamp(2rem,5vw,3.5rem); line-height: 1.1; position: relative; }
+  header h1 em { color: var(--terracotta); font-style: italic; }
+  header p.sub { margin-top: 12px; font-size: .88rem; color: #a8b0b8; position: relative; letter-spacing: .04em; }
+  .tags-header { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; position: relative; }
+  .tags-header span { background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.18); color: var(--cream); padding: 4px 12px; border-radius: 20px; font-size: .78rem; }
+
+  nav.tabs { background: var(--sand); display: flex; overflow-x: auto; border-bottom: 2px solid #d4c9b0; position: sticky; top: 0; z-index: 100; }
+  nav.tabs::-webkit-scrollbar { height: 0; }
+  .tab-btn { background: none; border: none; cursor: pointer; padding: 13px 20px; font-family: 'DM Sans',sans-serif; font-size: .82rem; font-weight: 500; color: var(--muted); white-space: nowrap; border-bottom: 3px solid transparent; transition: all .2s; letter-spacing: .03em; }
+  .tab-btn:hover { color: var(--slate); }
+  .tab-btn.active { color: var(--terracotta); border-bottom-color: var(--terracotta); }
+
+  .section { display: none; padding: 36px 40px; max-width: 1200px; margin: 0 auto; }
+  .section.active { display: block; }
+  .section-intro { margin-bottom: 26px; }
+  .section-intro h2 { font-family: 'Playfair Display', serif; font-size: 1.55rem; color: var(--slate); margin-bottom: 5px; }
+  .section-intro p { font-size: .87rem; color: var(--muted); }
+
+  /* GRID */
+  .overview-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px,1fr)); gap: 22px; }
+
+  .card { background: white; border-radius: 14px; overflow: hidden; box-shadow: 0 2px 14px rgba(0,0,0,.07); transition: transform .25s, box-shadow .25s; cursor: default; }
+  .card:hover { transform: translateY(-3px); box-shadow: 0 8px 28px rgba(0,0,0,.11); }
+
+
+
+
+  .card-header { padding: 18px 22px 14px; border-bottom: 1px solid #f0ebe0; }
+  .card-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px; }
+  .card-rank { font-size: .68rem; font-weight: 500; letter-spacing: .1em; color: var(--muted); text-transform: uppercase; }
+  .card-rank.top5 { color: var(--terracotta); }
+  .card h3 { font-family: 'Playfair Display', serif; font-size: 1.25rem; color: var(--slate); }
+  .transport-pill { background: var(--cream); border: 1px solid var(--sand); border-radius: 20px; font-size: .72rem; padding: 3px 10px; color: var(--muted); white-space: nowrap; }
+  .vibe-tags { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 10px; }
+  .vibe-tag { background: var(--cream); border: 1px solid var(--sand); color: var(--muted); font-size: .7rem; padding: 2px 9px; border-radius: 20px; }
+
+  .card-body { padding: 16px 22px 18px; }
+  .card-body p { font-size: .85rem; line-height: 1.65; color: #555; margin-bottom: 14px; }
+  .scores-mini { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 14px; }
+  .score-item { text-align: center; }
+  .score-label { font-size: .62rem; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin-bottom: 3px; }
+  .score-bar { height: 4px; background: var(--sand); border-radius: 2px; overflow: hidden; margin-bottom: 2px; }
+  .score-fill { height: 100%; border-radius: 2px; }
+  .score-num { font-size: .7rem; font-weight: 500; color: var(--slate); }
+
+  .card-footer { padding: 11px 22px 15px; background: #faf8f4; border-top: 1px solid #f0ebe0; display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+  .time-info { font-size: .78rem; color: var(--muted); }
+  .time-info strong { color: var(--slate); }
+  .budget-badge { background: var(--cream); border: 1px solid var(--sand); border-radius: 6px; padding: 4px 10px; font-size: .76rem; font-weight: 500; color: var(--moss); white-space: nowrap; }
+  .detail-btn { background: var(--slate); color: white; border: none; padding: 8px 16px; border-radius: 7px; font-size: .78rem; cursor: pointer; font-family: 'DM Sans',sans-serif; font-weight: 500; transition: background .2s; display: block; width: 100%; margin-top: 2px; text-align: center; }
+  .detail-btn:hover { background: var(--terracotta); }
+
+  /* DETAIL */
+  .detail-view { display: none; }
+  .detail-view.active { display: block; }
+  .back-btn { background: none; border: 1px solid var(--sand); padding: 7px 16px; border-radius: 6px; cursor: pointer; font-family: 'DM Sans',sans-serif; font-size: .84rem; color: var(--muted); margin-bottom: 24px; transition: all .2s; }
+  .back-btn:hover { background: var(--sand); color: var(--slate); }
+
+  .detail-hero { border-radius: 16px; margin-bottom: 24px; background: var(--slate); }
+
+
+  .detail-hero-content { padding: 32px 36px; color: var(--cream); }
+  .detail-hero-content .country { font-size: .78rem; opacity: .7; margin-bottom: 6px; letter-spacing: .05em; }
+  .detail-hero-content h2 { font-family: 'Playfair Display', serif; font-size: clamp(1.6rem,3.5vw,2.5rem); }
+  .detail-hero-content .subtitle { font-size: .85rem; color: #a8b0b8; margin-top: 6px; }
+  .detail-vibe { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 14px; }
+  .detail-vibe span { background: rgba(255,255,255,.15); border: 1px solid rgba(255,255,255,.22); color: var(--cream); padding: 4px 13px; border-radius: 20px; font-size: .77rem; }
+
+  .detail-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; margin-bottom: 24px; }
+  @media (max-width: 680px) { .detail-grid { grid-template-columns: 1fr; } }
+
+  .detail-card { background: white; border-radius: 12px; padding: 24px; box-shadow: 0 2px 12px rgba(0,0,0,.06); margin-bottom: 18px; }
+  .detail-card h4 { font-family: 'Playfair Display', serif; font-size: 1rem; color: var(--terracotta); margin-bottom: 13px; padding-bottom: 9px; border-bottom: 1px solid var(--cream); }
+
+  .info-row { display: flex; justify-content: space-between; align-items: baseline; padding: 6px 0; border-bottom: 1px dotted #eee; font-size: .84rem; }
+  .info-row:last-child { border-bottom: none; }
+  .info-row .label { color: var(--muted); flex-shrink: 0; }
+  .info-row .value { font-weight: 500; color: var(--slate); text-align: right; max-width: 62%; }
+
+  .budget-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; margin-top: 4px; }
+  .budget-item { background: var(--cream); border-radius: 8px; padding: 10px 12px; }
+  .budget-item .bi-label { font-size: .68rem; text-transform: uppercase; letter-spacing: .07em; color: var(--muted); }
+  .budget-item .bi-value { font-size: .95rem; font-weight: 500; color: var(--slate); margin-top: 3px; }
+  .budget-total { background: var(--slate); color: white; border-radius: 8px; padding: 13px; text-align: center; grid-column: 1/-1; margin-top: 4px; }
+  .budget-total .bt-label { font-size: .72rem; opacity: .65; letter-spacing: .06em; }
+  .budget-total .bt-value { font-size: 1.25rem; font-weight: 500; margin-top: 2px; }
+
+  .score-full { margin-top: 4px; }
+  .score-row { display: flex; align-items: center; gap: 10px; padding: 5px 0; font-size: .8rem; }
+  .score-row .sl { width: 115px; color: var(--muted); flex-shrink: 0; }
+  .score-row .sb { flex: 1; height: 5px; background: var(--cream); border-radius: 3px; overflow: hidden; }
+  .score-row .sf { height: 100%; border-radius: 3px; }
+  .score-row .sn { width: 22px; text-align: right; font-weight: 500; color: var(--slate); }
+
+  .itinerary .day-block { margin-bottom: 16px; }
+  .day-label { font-size: .7rem; font-weight: 500; text-transform: uppercase; letter-spacing: .1em; color: var(--terracotta); margin-bottom: 7px; }
+  .day-activities { list-style: none; }
+  .day-activities li { font-size: .84rem; padding: 4px 0 4px 15px; position: relative; line-height: 1.5; color: #555; border-bottom: 1px dotted #eee; }
+  .day-activities li:last-child { border-bottom: none; }
+  .day-activities li::before { content: '→'; position: absolute; left: 0; color: var(--gold); font-size: .78rem; }
+
+  .info-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+  .info-tag { background: var(--cream); border: 1px solid var(--sand); color: var(--muted); font-size: .74rem; padding: 3px 11px; border-radius: 20px; }
+  .alert-box { background: #fff8f0; border: 1px solid #f0d8b8; border-left: 3px solid var(--gold); border-radius: 8px; padding: 12px 14px; font-size: .83rem; color: #7a5c30; line-height: 1.55; margin-top: 4px; }
+
+  .ef-bajo { background: #e8f5e9; color: #2e7d32; display: inline-block; padding: 3px 12px; border-radius: 20px; font-size: .77rem; font-weight: 500; }
+  .ef-medio { background: #fff8e1; color: #f57f17; display: inline-block; padding: 3px 12px; border-radius: 20px; font-size: .77rem; font-weight: 500; }
+  .r-bajo { background: #e8f5e9; color: #2e7d32; display: inline-block; padding: 3px 12px; border-radius: 20px; font-size: .77rem; font-weight: 500; }
+  .r-medio { background: #fff8e1; color: #f57f17; display: inline-block; padding: 3px 12px; border-radius: 20px; font-size: .77rem; font-weight: 500; }
+
+  /* RANKING */
+  .ranking-list { display: flex; flex-direction: column; gap: 16px; }
+  .rank-item { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,.07); display: grid; grid-template-columns: 70px 1fr; }
+  .rank-num { display: flex; align-items: center; justify-content: center; font-family: 'Playfair Display', serif; font-size: 2.2rem; background: var(--slate); color: white; }
+  .rank-item:nth-child(1) .rank-num { background: var(--terracotta); }
+  .rank-item:nth-child(2) .rank-num { background: var(--moss); }
+  .rank-item:nth-child(3) .rank-num { background: var(--sky); }
+  .rank-content { padding: 20px 24px; }
+  .rank-content h3 { font-family: 'Playfair Display', serif; font-size: 1.18rem; margin-bottom: 5px; }
+  .rank-content p { font-size: .84rem; color: #555; line-height: 1.65; margin-bottom: 10px; }
+  .rank-scores-inline { display: flex; gap: 14px; flex-wrap: wrap; }
+  .rsi { text-align: center; }
+  .rsi-label { font-size: .62rem; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
+  .rsi-val { font-size: .95rem; font-weight: 500; color: var(--slate); }
+  .rank-detail-btn { background: none; border: 1px solid var(--sand); padding: 6px 14px; border-radius: 6px; cursor: pointer; font-family: 'DM Sans',sans-serif; font-size: .78rem; color: var(--muted); transition: all .2s; margin-top: 10px; }
+  .rank-detail-btn:hover { background: var(--slate); color: white; border-color: var(--slate); }
+
+  #sec-ranking .section-title { font-family: 'Playfair Display', serif; font-size: 1.7rem; margin-bottom: 4px; color: var(--slate); }
+  #sec-ranking .section-sub { color: var(--muted); font-size: .88rem; margin-bottom: 26px; }
+
+  .warning-banner { background: #fff8e1; border: 1px solid #ffe082; border-radius: 8px; padding: 10px 14px; font-size: .82rem; color: #7a5c00; margin-top: 8px; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Escapadas de Octubre<br><em>9 · 10 · 11 · 12</em></h1>
+  <p class="sub">Guía personalizada · Salida viernes tarde · Sin auto · Dos amigas · Avión donde aplica</p>
+  <div class="tags-header">
+    <span>✈️ Avión / Ferry / Micro</span>
+    <span>🚶 Sin auto</span>
+    <span>🌿 Pueblo + naturaleza</span>
+    <span>💤 Relax prioritario</span>
+    <span>🍷 Buena gastronomía</span>
+    <span>💰 Presupuesto por persona</span>
+  </div>
+</header>
+
+<nav class="tabs">
+  <button class="tab-btn active" onclick="showTab('overview', this)">🗺️ Los 12 destinos</button>
+  <button class="tab-btn" onclick="showTab('ranking', this)">🏆 Top 5 ranking</button>
+</nav>
+
+<div id="sec-overview" class="section active">
+  <div class="section-intro">
+    <h2>12 escapadas para tu fin de semana largo</h2>
+    <p>Salida viernes 9 por la tarde · 3 días plenos (sáb, dom, lun) · Presupuestos en USD por persona · Hacé clic en "Ver detalle" para el itinerario completo.</p>
+  </div>
+  <div id="card-grid" class="overview-grid"></div>
+  <div id="detail-panel" class="detail-view"></div>
+</div>
+
+<div id="sec-ranking" class="section">
+  <div class="section-title">🏆 Top 5 para su perfil</div>
+  <div class="section-sub">Seleccionadas por relax, facilidad sin auto, combinación pueblo + naturaleza y octubre como mes ideal.</div>
+  <div class="ranking-list" id="ranking-list"></div>
+</div>
+
+<script>
+const dests = [
+  {
+    id:1, nombre:"Colonia del Sacramento", pais:"🇺🇾 Uruguay", isTop5:true,
+    transport:"⛴️ Ferry 1h 15min",
+    vibe:["Adoquines coloniales","Cafés con jardín","Río + atardecer","Slow travel"],
+    por_que:"El destino perfecto: calles de piedra portuguesas, arquitectura UNESCO, cafeterías íntimas, el Río de la Plata al fondo. Todo el casco histórico es peatonal. Saliendo el viernes tarde en ferry llegás en 1h15 y tenés tres días completos. Octubre es primavera allá: flores, luz dorada y menos turistas que en verano.",
+    como_llegar:"Ferry desde Puerto Madero (Buquebus o Colonia Express). Salen hasta las 22hs.",
+    tiempo:"1h 15min puerta a puerto · Terminal a casco: 15 min a pie",
+    sin_auto:"10/10 — Todo el casco histórico es peatonal. Taxis para la playa.",
+    transporte_costo:"$60–80 por persona (ida y vuelta)",
+    alojamiento:"$45–80 por noche (B&B o depto)",
+    comidas:"$25–40 por día",
+    actividades:"$0–20",
+    total_pp:"$280–420 por persona (4 días)",
+    nivel:"Intermedio",
+    itinerary:{
+      "Vie 9 · Llegada nocturna":["Ferry de tarde/noche desde Puerto Madero","Llegada ~20–22hs, check-in","Cena liviana en el casco histórico","Primera caminata nocturna por el adoquinado"],
+      "Sáb 10 · Exploración":["Desayuno en El Drugstore o café con jardín","Paseo por el Barrio Histórico UNESCO","Subir al Faro para el mejor atardecer","Visita al Museo Portugués","Cena larga con vinos uruguayos"],
+      "Dom 11 · Tranquilidad":["Desayuno sin apuro","Playa El Ferrando (taxi $3)","Almuerzo frente al río","Tour a bodega Artesanal (taxi)","Noche en alguna terraza con vista"],
+      "Lun 12 · Mañana final + regreso":["Última vuelta por el mercado artesanal","Café de despedida","Ferry de regreso (hay frecuencias todo el día)"]
+    },
+    actividades_rec:["Barrio Histórico UNESCO","Faro con vista al río","Playa El Ferrando","Bodega Artesanal","Mercado artesanal","Alquiler de bicicletas por la rambla","Ruinas del Real de San Carlos"],
+    si_llueve:"¡Ideal! Museos, cafés con fuego, tiendas de artesanos, el Museo Portugués. La lluvia le da un encanto especial al adoquinado.",
+    clima:"Primavera: 15–22°C, días soleados. Uno de los mejores meses del año.",
+    esfuerzo:"bajo", riesgo:"bajo",
+    scores:{relax:9,naturaleza:6,gastronomia:8,sin_auto:10,precio_calidad:8,originalidad:7}
+  },
+  {
+    id:2, nombre:"Tandil", pais:"🇦🇷 Argentina", isTop5:true,
+    transport:"🚌 Micro 5h",
+    vibe:["Sierras suaves","Quesos + salamines","Caminatas tranquilas","Alfajores artesanales"],
+    por_que:"El clásico de los clásicos, y por algo. Octubre es el mes más lindo: sierras verdes, temperatura perfecta (15–23°C) y campo florecido. Saliendo en micro nocturno el viernes llegás sábado temprano con tres días plenos. La gastronomía (quesos, salamines, alfajores) es motivo de viaje por sí sola.",
+    como_llegar:"Micro nocturno desde Retiro (Cóndor Estrella, Plusmar). Salida ~22–23hs del vie 9, llegada ~5–6hs del sáb 10.",
+    tiempo:"4h 45min–5h de viaje",
+    sin_auto:"8/10 — Centro totalmente caminable. Taxis baratos al Lago del Fuerte y Cerro Centinela.",
+    transporte_costo:"$22–40 por persona (ida y vuelta)",
+    alojamiento:"$30–60 por noche (posada o depto)",
+    comidas:"$20–38 por día",
+    actividades:"$8–20",
+    total_pp:"$180–310 por persona",
+    nivel:"Económico / Intermedio",
+    itinerary:{
+      "Vie 9 · Viaje nocturno":["Micro nocturno desde Retiro (~22hs)","Dormir en el micro (5 horas)"],
+      "Sáb 10 · Llegada y sierras":["Llegada ~5–6hs, check-in o guardar valijas","Desayuno en panadería del centro","Caminata al Cerro La Movediza (fácil, vistas)","Picada de chacinados al mediodía","Tarde de descanso en la posada"],
+      "Dom 11 · Lago + pueblo":["Paseo por el Lago del Fuerte (remo opcional)","Visita a fábrica de quesos o alfajores","Tarde libre: mercado artesanal","Cena en La Época de Quesos o bodegón"],
+      "Lun 12 · Compras + regreso":["Desayuno tranquilo","Compras: quesos, salamines, alfajores","Micro de vuelta a Buenos Aires"]
+    },
+    actividades_rec:["Lago del Fuerte","Cerro La Movediza","Circuito de quesos y salamines","Alfajores artesanales","Cerro Centinela (taxi)","Monte Calvario","Heladerías"],
+    si_llueve:"Muy amigable: chocolaterías, fábricas de queso con degustación, bares y museos locales. El viaje no se arruina.",
+    clima:"Octubre es el mes más lindo: 14–23°C, cielos azules, campo verde y florecido.",
+    esfuerzo:"bajo", riesgo:"bajo",
+    scores:{relax:8,naturaleza:8,gastronomia:9,sin_auto:8,precio_calidad:9,originalidad:6}
+  },
+  {
+    id:3, nombre:"Montevideo", pais:"🇺🇾 Uruguay", isTop5:false,
+    transport:"⛴️ Ferry 2h 15min",
+    vibe:["Rambla infinita","Mercado del Puerto","Barrios con encanto","Cultura rioplatense"],
+    por_que:"Montevideo en octubre es una ciudad viva con la misma energía rioplatense pero diferente. La rambla es perfecta para caminar sin fin. El Mercado del Puerto, la Ciudad Vieja, la feria de Tristán Narvaja y los barrios Palermo y Sur ofrecen todo sin auto. Ferry directo desde Buenos Aires.",
+    como_llegar:"Ferry directo Buenos Aires → Montevideo (Buquebus, ~2h 15min). Salidas desde las 8hs.",
+    tiempo:"2h 15min directo",
+    sin_auto:"9/10 — Excelente transporte público (STM), Uber/Cabify disponibles.",
+    transporte_costo:"$80–110 por persona (ida y vuelta, ferry directo)",
+    alojamiento:"$40–85 por noche",
+    comidas:"$25–45 por día",
+    actividades:"$8–20",
+    total_pp:"$280–450 por persona",
+    nivel:"Intermedio",
+    itinerary:{
+      "Vie 9 · Llegada nocturna":["Ferry de tarde desde Buenos Aires","Check-in en Ciudad Vieja o Palermo","Cena en bodegón local"],
+      "Sáb 10 · Rambla":["Desayuno en café histórico","Caminata por la rambla (Pocitos → Buceo)","Almuerzo en Mercado de Ferreiro","Tarde: Ciudad Vieja y Plaza Independencia","Noche en bar de Palermo"],
+      "Dom 11 · Mercado":["Mercado del Puerto (almuerzo con chivito)","Recorrida por Ciudad Vieja","Tarde libre en Parque Rodó","Cena en Montevideo Bistró"],
+      "Lun 12 · Final + regreso":["Desayuno en panadería uruguaya","Último paseo por Palermo","Ferry de vuelta"]
+    },
+    actividades_rec:["Mercado del Puerto","Rambla completa","Ciudad Vieja","Feria Tristán Narvaja","Museo MAPI / MNAV","Teatro Solís","Barrio Sur y Palermo"],
+    si_llueve:"Excelente: museos de clase mundial, cafés históricos, el Mercado del Puerto techado, bares de jazz.",
+    clima:"Primavera: 14–21°C. Variable pero generalmente lindo. Llevar campera.",
+    esfuerzo:"bajo", riesgo:"bajo",
+    scores:{relax:7,naturaleza:5,gastronomia:9,sin_auto:9,precio_calidad:7,originalidad:7}
+  },
+  {
+    id:4, nombre:"Gualeguaychú", pais:"🇦🇷 Argentina", isTop5:true,
+    transport:"🚌 Micro 3h",
+    vibe:["Río + costanera","Reservas naturales","Pueblo entrerriano","Relax total"],
+    por_que:"Siempre subestimada pero es una joya. En octubre: temperatura perfecta (17–26°C), río precioso, Parque Unzué con senderos gratuitos, 8 reservas naturales y costanera caminable al 100%. A solo 3 horas de Buenos Aires con micro directo. La más económica del listado.",
+    como_llegar:"Micro directo desde Retiro (Flecha Bus, Vía Tac). Salen hasta las 23hs.",
+    tiempo:"3h de viaje",
+    sin_auto:"8/10 — Centro y costanera totalmente caminables. Remises muy baratos para reservas.",
+    transporte_costo:"$18–28 por persona (ida y vuelta)",
+    alojamiento:"$22–50 por noche",
+    comidas:"$18–35 por día",
+    actividades:"$0–15",
+    total_pp:"$150–260 por persona",
+    nivel:"Económico",
+    itinerary:{
+      "Vie 9 · Llegada nocturna":["Micro de tarde/noche desde Retiro","Check-in cerca de la costanera","Cena liviana y primera caminata por el río"],
+      "Sáb 10 · Río y naturaleza":["Desayuno en el centro","Playa fluvial del río","Kayak o paseo en lancha (opcional)","Tarde en el Parque Unzué (entrada libre)","Reserva Natural La Delfina (gratis)"],
+      "Dom 11 · Exploración":["Sendero en la reserva natural","Avistaje de aves","Mercado de productores","Tarde de descanso en la costanera","Cena con platos entrerrianos"],
+      "Lun 12 · Mañana + regreso":["Desayuno relajado","Última vuelta por la costanera","Micro de vuelta"]
+    },
+    actividades_rec:["Parque Unzué y senderos","Reserva Natural La Delfina (gratis)","Playa del río","Kayak","Corsódromo","Mercado de productores","Avistaje de aves"],
+    si_llueve:"Más limitado, pero el centro histórico, bares y confiterías son acogedores. El parque bajo lluvia leve tiene su encanto.",
+    clima:"Primavera: 17–26°C. Cálido y agradable. Ideal para río y naturaleza.",
+    esfuerzo:"bajo", riesgo:"bajo",
+    scores:{relax:9,naturaleza:8,gastronomia:7,sin_auto:8,precio_calidad:10,originalidad:7}
+  },
+  {
+    id:5, nombre:"San Antonio de Areco", pais:"🇦🇷 Argentina", isTop5:true,
+    transport:"🚌 Micro 2h",
+    vibe:["Pueblo gaucho","Artesanos de plata","Río Areco","Pampa auténtica"],
+    por_que:"El pueblo más auténtico a 2 horas de Buenos Aires. Adoquines, el río Areco, el Parque Criollo, talleres de platería gaucha. Octubre es el mes previo a la Fiesta de la Tradición (noviembre): el ambiente está vivo pero sin el caos turístico. Micro muy barato y frecuente desde Retiro.",
+    como_llegar:"Micro desde Retiro (Chevallier, 20 de Junio). Frecuencia frecuente, último ~22hs.",
+    tiempo:"2h de viaje",
+    sin_auto:"9/10 — El pueblo completo es caminable. Remis accesible para estancias.",
+    transporte_costo:"$10–18 por persona (ida y vuelta)",
+    alojamiento:"$28–60 por noche (posada histórica)",
+    comidas:"$20–38 por día",
+    actividades:"$5–15",
+    total_pp:"$140–270 por persona",
+    nivel:"Económico",
+    itinerary:{
+      "Vie 9 · Llegada nocturna":["Micro de tarde/noche desde Retiro","Check-in en posada histórica","Cena en restaurante del casco o pulpería"],
+      "Sáb 10 · Pueblo gaucho":["Desayuno gaucho en panadería","Parque Criollo Ricardo Güiraldes","Talleres de platería y cuero","Orilla del río Areco al atardecer","Cena en pulpería tradicional"],
+      "Dom 11 · Calma total":["Desayuno sin apuro","Caminata por los alrededores","Museo Gauchesco","Mercado artesanal (si hay)","Siesta larga + lectura"],
+      "Lun 12 · Mañana + regreso":["Última vuelta por el río","Compras en almacén de campo","Micro de vuelta"]
+    },
+    actividades_rec:["Parque Criollo Ricardo Güiraldes","Talleres de platería gaucha","Museo Gauchesco","Orilla del río Areco","Pulperías de campo","Almacenes históricos"],
+    si_llueve:"El pueblo bajo la lluvia tiene un encanto especial. Museos y talleres artesanales son perfectos para la tarde.",
+    clima:"Primavera: 14–24°C. Campo verde y florecido. Muy agradable.",
+    esfuerzo:"bajo", riesgo:"bajo",
+    scores:{relax:9,naturaleza:6,gastronomia:7,sin_auto:9,precio_calidad:10,originalidad:8}
+  },
+  {
+    id:6, nombre:"Sierra de la Ventana", pais:"🇦🇷 Argentina", isTop5:false,
+    transport:"🚌 Micro 6–7h",
+    vibe:["Sierras bonaerenses","Piletas naturales","Arroyo + bosques","Pueblo chico"],
+    por_que:"La opción serrana con más paisaje de la provincia. Octubre tiene las piletas naturales con agua y el campo en plena floración. El Parque Tornquist tiene senderos de distintos niveles. Con remises locales es manejable sin auto, aunque requiere algo de organización.",
+    como_llegar:"Micro nocturno desde Retiro (Cóndor Estrella). Sale ~22–23hs vie 9, llega ~5–6hs sáb 10.",
+    tiempo:"6–7h de viaje",
+    sin_auto:"6/10 — Pueblo caminable, pero el Parque Tornquist requiere remis o colectivo local. Planificación necesaria.",
+    transporte_costo:"$25–40 por persona (ida y vuelta)",
+    alojamiento:"$25–55 por noche (cabaña o posada)",
+    comidas:"$18–32 por día",
+    actividades:"$12–25",
+    total_pp:"$170–300 por persona",
+    nivel:"Económico / Intermedio",
+    itinerary:{
+      "Vie 9 · Viaje nocturno":["Micro nocturno desde Retiro (~22hs)"],
+      "Sáb 10 · Llegada + arroyo":["Llegada ~6hs, check-in","Desayuno y descanso","Tarde: Sendero del Arroyo Sauce Grande (piletas naturales) vía remis al parque"],
+      "Dom 11 · Cerro":["Sendero Cerro Bahía Blanca (suave, vistas) — guía opcional","Almuerzo en la base","Tarde en el pueblo, chocolatería local"],
+      "Lun 12 · Mañana + regreso":["Desayuno tranquilo","Pueblo de Villa Ventana (combi local)","Micro de vuelta"]
+    },
+    actividades_rec:["Parque Tornquist (senderos)","Piletas naturales del Arroyo","Cerro Bahía Blanca","Villa Ventana (encantadora)","Chocolaterías artesanales"],
+    si_llueve:"Más limitado. Con lluvia fuerte los senderos no son recomendables. Cabaña + fuego + libros.",
+    clima:"Primavera: 12–24°C. Octubre especialmente bello: campo verde, piletas con agua.",
+    esfuerzo:"medio", riesgo:"medio",
+    scores:{relax:7,naturaleza:9,gastronomia:5,sin_auto:6,precio_calidad:8,originalidad:7}
+  },
+  {
+    id:7, nombre:"Colón (Entre Ríos)", pais:"🇦🇷 Argentina", isTop5:false,
+    transport:"🚌 Micro 4h",
+    vibe:["Río Uruguay","Arena blanca","Pueblo histórico","El Palmar (palmeras)"],
+    por_que:"Una joya del litoral poco conocida. Playas de arena blanca sobre el río Uruguay, un centro histórico con el famoso puente giratorio, artesanos y restaurantes sobre el río. El Parque Nacional El Palmar (palmeras yatay centenarias) es único en el mundo.",
+    como_llegar:"Micro directo desde Retiro (Flecha Bus, Empresa Argentina). Último ~23hs.",
+    tiempo:"4–4h 30min de viaje",
+    sin_auto:"7/10 — Centro y costanera caminables. Para El Palmar: excursión organizada o remis.",
+    transporte_costo:"$20–30 por persona (ida y vuelta)",
+    alojamiento:"$25–55 por noche (cabaña o posada)",
+    comidas:"$18–35 por día",
+    actividades:"$10–25",
+    total_pp:"$160–290 por persona",
+    nivel:"Económico",
+    itinerary:{
+      "Vie 9 · Llegada nocturna":["Micro de tarde desde Retiro","Check-in","Cena frente al río"],
+      "Sáb 10 · Playa y pueblo":["Desayuno en café local","Playa del río Uruguay","Centro histórico y puente giratorio","Mercado de artesanos","Cena con pescados de río"],
+      "Dom 11 · El Palmar":["Excursión a Parque Nacional El Palmar (remis o excursión)","Palmeras yatay centenarias — únicas en el mundo","Tarde de descanso"],
+      "Lun 12 · Mañana + regreso":["Última vuelta por la costanera","Micro de vuelta"]
+    },
+    actividades_rec:["Playas del río Uruguay","Parque Nacional El Palmar","Centro histórico y puente giratorio","Kayak en el río","Artesanos locales","Termas de Colón (optativo, remis)"],
+    si_llueve:"El centro histórico y los restaurantes son acogedores. El Palmar puede visitarse con lluvia leve.",
+    clima:"Primavera: 17–27°C. Cálido. Paisajes del río hermosos.",
+    esfuerzo:"bajo", riesgo:"bajo",
+    scores:{relax:8,naturaleza:8,gastronomia:7,sin_auto:7,precio_calidad:10,originalidad:8}
+  },
+  {
+    id:8, nombre:"Piriápolis", pais:"🇺🇾 Uruguay", isTop5:false,
+    transport:"⛴️ Ferry + bus 3h",
+    vibe:["Balneario fuera de temporada","Morro + senderismo","Rambla vacía","Encanto art-deco"],
+    por_que:"El balneario más auténtico de Uruguay. En octubre fuera de temporada: silencio, precios bajos, el Morro San Antonio esperándote, rambla vacía y toda la magia de un pueblo costero sin turistas. El Hotel Argentino (art-deco icónico) es una experiencia en sí mismo.",
+    como_llegar:"Ferry a Colonia + bus a Piriápolis (3h total) o ferry a Montevideo + bus (3h 30min).",
+    tiempo:"3–3h 30min puerta a puerta",
+    sin_auto:"8/10 — Centro y rambla caminables. Taxis para el Morro y Pan de Azúcar.",
+    transporte_costo:"$70–100 por persona (ida y vuelta)",
+    alojamiento:"$35–70 por noche",
+    comidas:"$22–40 por día",
+    actividades:"$10–20",
+    total_pp:"$240–420 por persona",
+    nivel:"Intermedio",
+    itinerary:{
+      "Vie 9 · Llegada nocturna":["Ferry + bus desde Buenos Aires","Check-in (Hotel Argentino u otro)","Cena frente al mar"],
+      "Sáb 10 · Morro":["Ascenso al Morro San Antonio (40 min, vistas al mar)","Almuerzo en el puerto de pescadores","Tarde leyendo en la rambla vacía","Atardecer desde la costanera"],
+      "Dom 11 · Calma":["Desayuno largo","Caminata por la rambla hasta el faro","Cerro Pan de Azúcar (taxi, vistas panorámicas)","Cena especial"],
+      "Lun 12 · Final + regreso":["Último paseo","Bus + ferry de vuelta"]
+    },
+    actividades_rec:["Ascenso al Morro San Antonio","Cerro Pan de Azúcar","Rambla peatonal","Puerto de pescadores","Hotel Argentino (arquitectura art-deco)","Playas fuera de temporada"],
+    si_llueve:"El Hotel Argentino tiene bar histórico con vista al mar. El pueblo bajo lluvia tiene un encanto melancólico muy especial.",
+    clima:"Primavera: 13–19°C. Fresco y ventoso. Ideal para paisaje y caminatas, no para baño.",
+    esfuerzo:"bajo", riesgo:"bajo",
+    scores:{relax:9,naturaleza:7,gastronomia:6,sin_auto:8,precio_calidad:8,originalidad:9}
+  },
+  {
+    id:9, nombre:"Mendoza", pais:"🇦🇷 Argentina", isTop5:false,
+    transport:"✈️ Vuelo 1h 30min",
+    vibe:["Bodegas + Malbec","Cordillera de fondo","Gastronomía top","Ciudad con onda"],
+    por_que:"Octubre es el mes ideal: post-vendimia, viñedos verdes, calor suave (20–28°C) y sin el caos de marzo. La ciudad tiene Uber y taxis para todo. Bodegas de Maipú accesibles en metrotranvía. Gastronomía de clase mundial (un restaurante fue recomendado por Guía Michelin en 2025).",
+    como_llegar:"Vuelo directo desde Aeroparque o Ezeiza (Aerolíneas, Flybondi, JetSmart). ~1h 30min.",
+    tiempo:"1h 30min de vuelo",
+    sin_auto:"7/10 — Ciudad con Uber/taxi. Bodegas de Maipú en metrotranvía. Valle de Uco requiere excursión organizada.",
+    transporte_costo:"$80–150 por persona (vuelo ida y vuelta)",
+    alojamiento:"$40–90 por noche",
+    comidas:"$25–50 por día",
+    actividades:"$20–50",
+    total_pp:"$270–500 por persona",
+    nivel:"Intermedio / Darse un gusto",
+    itinerary:{
+      "Vie 9 · Llegada nocturna":["Vuelo de tarde desde AEP o EZE","Check-in en hotel boutique del centro","Cena en la Av. Sarmiento o Belgrano"],
+      "Sáb 10 · Bodegas de Maipú":["Desayuno en el centro","Metrotranvía a Maipú (bodegas caminables)","Degustaciones y almuerzo en bodega","Tarde libre en la ciudad","Noche en bares de la peatonal"],
+      "Dom 11 · Alta Montaña":["Excursión organizada: Aconcagua + Puente del Inca + Penitentes","(Incluye traslado, imperdible sin auto)","Cena especial (bodega con restaurante)"],
+      "Lun 12 · Ciudad + regreso":["Parque San Martín caminando","Compras de vinos para llevar","Vuelo de vuelta"]
+    },
+    actividades_rec:["Bodegas de Maipú (en metrotranvía)","Excursión Alta Montaña (Aconcagua)","Parque San Martín","Av. Sarmiento gastronómica","Mercado Central","Cata de vinos en la ciudad","Bus Vitivinícola (opcional)"],
+    si_llueve:"La ciudad tiene excelente oferta gastronómica cubierta. Las bodegas funcionan igualmente. El día de Alta Montaña puede verse afectado.",
+    clima:"Primavera: 18–28°C. Soleado, seco. Uno de los mejores momentos del año.",
+    esfuerzo:"bajo", riesgo:"bajo",
+    scores:{relax:7,naturaleza:7,gastronomia:9,sin_auto:7,precio_calidad:7,originalidad:7},
+    warning:"Para las bodegas del Valle de Uco (las más espectaculares) se necesita excursión organizada. Maipú sí es accesible en transporte público."
+  },
+  {
+    id:10, nombre:"Bariloche", pais:"🇦🇷 Argentina", isTop5:false,
+    transport:"✈️ Vuelo 2h 15min",
+    vibe:["Lago + montaña nevada","Chocolate artesanal","Cerveza de bodega","Bosques en flor"],
+    por_que:"Octubre en Bariloche es temporada baja: precios accesibles, bosques florecidos, cumbres nevadas reflejadas en el lago y todo el centro a pie. Evento especial: 'Bariloche a la Carta' en octubre (semana gastronómica con descuentos). La combinación chocolate + cerveza artesanal + lago Nahuel Huapi es única.",
+    como_llegar:"Vuelo directo desde Aeroparque (Aerolíneas, Flybondi). ~2h 15min.",
+    tiempo:"2h 15min de vuelo",
+    sin_auto:"8/10 — Centro caminable. Bus urbano al Cerro Otto. Excursiones organizadas al lago y Tronador.",
+    transporte_costo:"$100–180 por persona (vuelo ida y vuelta)",
+    alojamiento:"$40–90 por noche",
+    comidas:"$22–45 por día",
+    actividades:"$20–50",
+    total_pp:"$280–520 por persona",
+    nivel:"Intermedio / Darse un gusto",
+    itinerary:{
+      "Vie 9 · Llegada nocturna":["Vuelo de tarde","Check-in con vista al lago","Primera caminata por el Centro Cívico","Cena y cerveza artesanal local"],
+      "Sáb 10 · Lago":["Desayuno con vista al Nahuel Huapi","Excursión al lago: Isla Victoria + Arrayanes (catamarán, organizada)","Tarde: chocolaterías del centro","Noche en bar de montaña"],
+      "Dom 11 · Cerro Otto":["Bus urbano al Cerro Otto (vistas panorámicas)","Confitería giratoria en la cima","Tarde libre: compras de chocolate y cerveza","Cena en restaurante con vista al lago"],
+      "Lun 12 · Mañana + regreso":["Desayuno tranquilo","Paseo final por la costanera","Vuelo de vuelta"]
+    },
+    actividades_rec:["Catamarán por el lago Nahuel Huapi","Isla Victoria y Bosque de Arrayanes","Cerro Otto (bus urbano)","Centro Cívico y lago","Chocolaterías artesanales","Cervecerías locales","Circuito Chico (excursión)"],
+    si_llueve:"La oferta de chocolaterías, cervecerías, cafés con vista al lago y el museo de arte local es excelente para días grises. La lluvia patagónica tiene su belleza.",
+    clima:"Primavera: 8–17°C. Variable, puede haber lluvias. Bosques florecidos y nieve en las cumbres. Llevar campera.",
+    esfuerzo:"bajo", riesgo:"bajo",
+    scores:{relax:8,naturaleza:9,gastronomia:8,sin_auto:8,precio_calidad:7,originalidad:8}
+  },
+  {
+    id:11, nombre:"Salta + Cafayate", pais:"🇦🇷 Argentina", isTop5:false,
+    transport:"✈️ Vuelo 2h directos",
+    vibe:["Colonial + colorido","Vinos de altura","Quebrada de Las Conchas","Norte auténtico"],
+    por_que:"El destino culturalmente más diferente del listado. Salta capital es colonial y caminable. Cafayate tiene bodegas de torrontés a las que se llega a pie. La Quebrada de Las Conchas (entre ambas) requiere excursión organizada, pero es uno de los paisajes más impresionantes de Argentina. Octubre: antes del calor del verano norteño.",
+    como_llegar:"Vuelo directo desde Aeroparque o Ezeiza (Aerolíneas, JetSmart). ~2h.",
+    tiempo:"2h de vuelo",
+    sin_auto:"7/10 — Salta ciudad: 100% caminable. Cafayate: pueblo caminable. La Quebrada entre ambas requiere excursión organizada obligatoriamente.",
+    transporte_costo:"$100–180 por persona (vuelo ida y vuelta)",
+    alojamiento:"$35–80 por noche",
+    comidas:"$22–42 por día",
+    actividades:"$25–60",
+    total_pp:"$280–520 por persona",
+    nivel:"Intermedio",
+    itinerary:{
+      "Vie 9 · Llegada nocturna":["Vuelo de tarde","Check-in en Salta capital","Cena en el centro colonial (empanadas salteñas imperdibles)"],
+      "Sáb 10 · Salta ciudad":["Desayuno en la plaza principal","City tour a pie: Catedral, Cabildo, Convento San Bernardo","Subida al Cerro San Bernardo (teleférico)","Almuerzo en mercado artesanal","Tarde libre y shopping"],
+      "Dom 11 · Cafayate":["Excursión organizada Quebrada de Las Conchas → Cafayate","Paisaje rojo y ocre increíble","Llegada a Cafayate: bodegas a pie, torrontés","Regreso a Salta por la tarde"],
+      "Lun 12 · Mañana + regreso":["Desayuno tranquilo en Salta","Compras: vinos, artesanías","Vuelo de vuelta"]
+    },
+    actividades_rec:["Quebrada de Las Conchas (excursión)","Bodegas de Cafayate a pie","Cerro San Bernardo (teleférico)","Plaza 9 de Julio y catedral","Mercado artesanal de Salta","Empanadas salteñas","Museo de Arte Étnico Americano"],
+    si_llueve:"Salta ciudad es excelente bajo lluvia: museos, cafés históricos, mercado cubierto. La excursión a la Quebrada puede verse afectada.",
+    clima:"Octubre: 20–28°C en Salta. Seco y soleado. Antes del calor fuerte del verano norteño.",
+    esfuerzo:"bajo", riesgo:"bajo",
+    scores:{relax:7,naturaleza:8,gastronomia:8,sin_auto:7,precio_calidad:7,originalidad:9},
+    warning:"La Quebrada de Las Conchas entre Salta y Cafayate REQUIERE excursión organizada. No hay forma de hacerla sin auto ni excursión."
+  },
+  {
+    id:12, nombre:"Puerto Madryn", pais:"🇦🇷 Argentina", isTop5:true,
+    transport:"✈️ Vuelo 2h 30min",
+    vibe:["Ballenas francas 🐋","Patagonia atlántica","Naturaleza única","Octubre = temporada pico"],
+    por_que:"Octubre es el mes pico de avistaje de ballenas francas australes: máxima concentración de ejemplares en el Golfo Nuevo, madres con crías. También hay pingüinos en Punta Tombo, lobos marinos y elefantes marinos. Es el único destino del listado donde la naturaleza es completamente única e irrepetible. Excursiones organizadas desde la ciudad sin necesitar auto.",
+    como_llegar:"Vuelo directo desde Aeroparque (Aerolíneas, Flybondi). ~2h 30min.",
+    tiempo:"2h 30min de vuelo",
+    sin_auto:"7/10 — Ciudad caminable. Excursiones organizadas a Península Valdés y Punta Tombo. Para algunos puntos se necesita remis.",
+    transporte_costo:"$100–180 por persona (vuelo ida y vuelta)",
+    alojamiento:"$35–75 por noche",
+    comidas:"$22–40 por día",
+    actividades:"$40–80 (excursión ballenas es el ítem principal)",
+    total_pp:"$290–530 por persona",
+    nivel:"Intermedio",
+    itinerary:{
+      "Vie 9 · Llegada nocturna":["Vuelo de tarde","Check-in en Puerto Madryn","Primera caminata por la costanera del Golfo Nuevo","Cena de bienvenida con mariscos patagónicos"],
+      "Sáb 10 · Ballenas":["Excursión mañana: avistaje de ballenas embarcado en el Golfo Nuevo","Tarde: Playa El Doradillo (ver ballenas desde la costa, a 15km, remis)","Cena tranquila"],
+      "Dom 11 · Península Valdés":["Excursión día completo a Península Valdés (organizada)","Lobos marinos + elefantes marinos + más ballenas","Paisaje patagónico único"],
+      "Lun 12 · Mañana + regreso":["Desayuno tranquilo","Paseo por el EcoCentro (museo de la ballena)","Vuelo de vuelta"]
+    },
+    actividades_rec:["Avistaje de ballenas (embarcado)","Playa El Doradillo (ballenas desde la costa)","Excursión Península Valdés","Lobos marinos + elefantes marinos","Pingüinos Punta Tombo (excursión)","EcoCentro (museo marino)","Costanera de Madryn"],
+    si_llueve:"Las excursiones de ballenas suelen salir igual (el mar en Madryn generalmente está calmo). El EcoCentro es excelente alternativa bajo lluvia.",
+    clima:"Octubre patagónico: 10–18°C. Fresco y ventoso. Llevar campera. Los días son largos y generalmente soleados.",
+    esfuerzo:"bajo", riesgo:"bajo",
+    scores:{relax:7,naturaleza:10,gastronomia:6,sin_auto:7,precio_calidad:7,originalidad:10}
+  }
+];
+
+const ranking = [
+  { pos:1, id:1, why:"Todo peatonal, arquitectura UNESCO única, ferry especial de 1h15, tres días plenos y octubre es su mejor mes. La gastronomía y los cafés del casco colonial son notables. El vibe de 'otro mundo a una hora de casa' es imbatible." },
+  { pos:2, id:12, why:"Octubre es literalmente el mes pico de ballenas: la mayor concentración del año. Es el único destino del listado con una experiencia natural completamente irrepetible e intransferible. Las excursiones están bien organizadas para viajeras sin auto." },
+  { pos:3, id:4, why:"La mejor relación precio-calidad de toda la lista. A solo 3 horas, naturaleza de calidad (8 reservas), costanera caminable, gastronomía entrerriana y temperatura perfecta. Muy poco concurrida comparada con Tandil o Colonia." },
+  { pos:4, id:2, why:"El clásico que se merece su reputación. Octubre es el mes más lindo del año en Tandil. La gastronomía (quesos, salamines, alfajores) es motivo de viaje por sí sola. Micro nocturno del viernes = tres días completos." },
+  { pos:5, id:5, why:"El más económico del listado y el más auténtico culturalmente. A solo 2 horas con micro muy barato. En octubre el campo está verde y el ambiente pregaucho de la Tradición (noviembre) ya se siente sin el caos de turistas." }
+];
+
+function scoreColor(v){ return v>=8?'#4a6741':v>=6?'#c9964a':'#c4633a'; }
+
+function buildCards(){
+  document.getElementById('card-grid').innerHTML = dests.map(d=>{
+    const s=d.scores;
+    return `<div class="card">
+
+      <div class="card-header">
+        <div class="card-top">
+          <div>
+            <div class="card-rank ${d.isTop5?'top5':''}">${d.isTop5?'⭐ Top 5':'Opción destacada'} · ${d.pais}</div>
+            <h3>${d.nombre}</h3>
+          </div>
+          <span class="transport-pill">${d.transport}</span>
+        </div>
+        <div class="vibe-tags">${d.vibe.map(v=>`<span class="vibe-tag">${v}</span>`).join('')}</div>
+      </div>
+      <div class="card-body">
+        <p>${d.por_que.substring(0,150)}...</p>
+        <div class="scores-mini">
+          ${[['Relax',s.relax],['Naturaleza',s.naturaleza],['Gastronomía',s.gastronomia]].map(([l,v])=>`
+          <div class="score-item">
+            <div class="score-label">${l}</div>
+            <div class="score-bar"><div class="score-fill" style="width:${v*10}%;background:${scoreColor(v)}"></div></div>
+            <div class="score-num">${v}/10</div>
+          </div>`).join('')}
+        </div>
+        <button class="detail-btn" onclick="showDetail(${d.id})">Ver detalle completo →</button>
+      </div>
+      <div class="card-footer">
+        <div class="time-info"><strong>${d.tiempo.split('·')[0].trim()}</strong></div>
+        <div class="budget-badge">${d.total_pp.split('por')[0].trim()} / persona</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function showDetail(id){
+  const d=dests.find(x=>x.id===id);
+  const s=d.scores;
+  const panel=document.getElementById('detail-panel');
+  const grid=document.getElementById('card-grid');
+
+  const itHtml=Object.entries(d.itinerary).map(([dia,acts])=>`
+    <div class="day-block">
+      <div class="day-label">${dia}</div>
+      <ul class="day-activities">${acts.map(a=>`<li>${a}</li>`).join('')}</ul>
+    </div>`).join('');
+
+  const scoresHtml=[
+    ['Relax',s.relax],['Naturaleza',s.naturaleza],['Gastronomía',s.gastronomia],
+    ['Facilidad sin auto',s.sin_auto],['Precio / calidad',s.precio_calidad],['Originalidad',s.originalidad]
+  ].map(([l,v])=>`
+    <div class="score-row">
+      <span class="sl">${l}</span>
+      <div class="sb"><div class="sf" style="width:${v*10}%;background:${scoreColor(v)}"></div></div>
+      <span class="sn">${v}</span>
+    </div>`).join('');
+
+  const warningHtml=d.warning?`<div class="warning-banner">⚠️ ${d.warning}</div>`:'';
+
+  panel.innerHTML=`
+    <button class="back-btn" onclick="closeDetail()">← Volver a todos los destinos</button>
+
+    <div class="detail-hero">
+
+
+      <div class="detail-hero-content">
+        <div class="country">${d.pais} · ${d.transport} ${d.isTop5?'· ⭐ Top 5':''}</div>
+        <h2>${d.nombre}</h2>
+        <div class="subtitle">${d.tiempo}</div>
+        <div class="detail-vibe">${d.vibe.map(v=>`<span>${v}</span>`).join('')}</div>
+      </div>
+    </div>
+
+    ${warningHtml}
+
+    <div class="detail-grid">
+      <div>
+        <div class="detail-card">
+          <h4>¿Por qué encaja con su perfil?</h4>
+          <p style="font-size:.86rem;line-height:1.7;color:#555">${d.por_que}</p>
+        </div>
+        <div class="detail-card">
+          <h4>📅 Itinerario — Salida viernes tarde</h4>
+          <div class="itinerary">${itHtml}</div>
+        </div>
+        <div class="detail-card">
+          <h4>🎯 Actividades recomendadas</h4>
+          <div class="info-tags">${d.actividades_rec.map(a=>`<span class="info-tag">${a}</span>`).join('')}</div>
+        </div>
+      </div>
+      <div>
+        <div class="detail-card">
+          <h4>🚌 Cómo llegar</h4>
+          <div class="info-row"><span class="label">Transporte</span><span class="value">${d.como_llegar}</span></div>
+          <div class="info-row"><span class="label">Duración</span><span class="value">${d.tiempo}</span></div>
+          <div class="info-row"><span class="label">Sin auto</span><span class="value">${d.sin_auto}</span></div>
+        </div>
+        <div class="detail-card">
+          <h4>💰 Presupuesto por persona</h4>
+          <div class="budget-grid">
+            <div class="budget-item"><div class="bi-label">Transporte (i/v)</div><div class="bi-value">${d.transporte_costo}</div></div>
+            <div class="budget-item"><div class="bi-label">Alojamiento/noche</div><div class="bi-value">${d.alojamiento}</div></div>
+            <div class="budget-item"><div class="bi-label">Comidas/día</div><div class="bi-value">${d.comidas}</div></div>
+            <div class="budget-item"><div class="bi-label">Actividades</div><div class="bi-value">${d.actividades}</div></div>
+            <div class="budget-total">
+              <div class="bt-label">TOTAL ESTIMADO · 4 DÍAS · POR PERSONA</div>
+              <div class="bt-value">${d.total_pp}</div>
+            </div>
+          </div>
+          <div style="margin-top:10px;font-size:.76rem;color:var(--muted)">Nivel: <strong>${d.nivel}</strong></div>
+        </div>
+        <div class="detail-card">
+          <h4>📊 Puntuaciones</h4>
+          <div class="score-full">${scoresHtml}</div>
+        </div>
+        <div class="detail-card">
+          <h4>🌡️ Clima en octubre</h4>
+          <p style="font-size:.84rem;color:#555;line-height:1.6">${d.clima}</p>
+        </div>
+        <div class="detail-card">
+          <h4>💪 Esfuerzo y riesgo</h4>
+          <div style="margin-bottom:8px"><span class="${d.esfuerzo==='bajo'?'ef-bajo':'ef-medio'}">Esfuerzo: ${d.esfuerzo==='bajo'?'🟢 Bajo':'🟡 Medio'}</span></div>
+          <span class="${d.riesgo==='bajo'?'r-bajo':'r-medio'}">Riesgo de cansancio: ${d.riesgo==='bajo'?'🟢 Bajo':'🟡 Medio'}</span>
+        </div>
+        <div class="detail-card">
+          <h4>🌧️ Si llueve...</h4>
+          <div class="alert-box">${d.si_llueve}</div>
+        </div>
+      </div>
+    </div>`;
+
+  grid.style.display='none';
+  panel.classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function closeDetail(){
+  document.getElementById('detail-panel').classList.remove('active');
+  document.getElementById('card-grid').style.display='grid';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function buildRanking(){
+  document.getElementById('ranking-list').innerHTML=ranking.map(r=>{
+    const d=dests.find(x=>x.id===r.id);
+    const s=d.scores;
+    return `<div class="rank-item">
+      <div class="rank-num">#${r.pos}</div>
+      <div class="rank-content">
+        <h3>${d.pais} ${d.nombre} <span style="font-size:.8rem;font-weight:300;color:var(--muted)">${d.transport}</span></h3>
+        <p>${r.why}</p>
+        <div class="rank-scores-inline">
+          ${[['Relax',s.relax],['Naturaleza',s.naturaleza],['Gastro',s.gastronomia],['Sin auto',s.sin_auto],['P/Q',s.precio_calidad]].map(([l,v])=>`
+          <div class="rsi">
+            <div class="rsi-label">${l}</div>
+            <div class="rsi-val" style="color:${scoreColor(v)}">${v}</div>
+          </div>`).join('')}
+        </div>
+        <button class="rank-detail-btn" onclick="showTab('overview',null);setTimeout(()=>showDetail(${d.id}),80)">Ver itinerario →</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function showTab(tab,btn){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('sec-'+tab).classList.add('active');
+  if(btn) btn.classList.add('active');
+  else document.querySelectorAll('.tab-btn').forEach(b=>{
+    if(b.getAttribute('onclick')&&b.getAttribute('onclick').includes("'"+tab+"'")) b.classList.add('active');
+  });
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+buildCards();
+buildRanking();
+</script>
+</body>
+</html>
